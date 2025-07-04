@@ -4,7 +4,7 @@ A web-based card game that captures the tension and excitement of the classic TV
 
 **➡️ [Live Demo](https://ryanmpierson.com/arcade/deal-or-decline/) ⬅️**
 
-*(To add your own gameplay GIF, you can use a free tool like Giphy Capture or LICEcap, record a short clip of your game, and replace the link above.)*
+![deal-or-decline](https://github.com/user-attachments/assets/1c55426a-8710-4c3a-9b6b-838528176fa6)
 
 ## About The Project
 
@@ -15,6 +15,7 @@ This project is a front-end web application built with vanilla HTML, CSS, and Ja
 ## Features
 
   * **Interactive Card Grid:** A scalable grid of 26 cards, each with a hidden monetary value.
+
   * **Player's Choice:** Select your own "lucky card" to keep until the end.
   * **Progressive Gameplay:** Play through multiple rounds, eliminating a decreasing number of cards each round.
   * **Dynamic Dealer Offers:** The dealer calculates and presents a buyout offer based on the average value of the remaining cards.
