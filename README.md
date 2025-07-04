@@ -53,11 +53,10 @@ This is a pure front-end project and requires no special installation or build s
 
 The project is organized into three main files:
 
-  * **`index.html`**: Provides the basic structure for the game, including the card grid, player/dealer areas, and the money board. It also includes the `<audio>` elements for the sound effects.
+  * **`index.html`**: Provides the basic structure for the game, including the card grid, player/dealer areas, and the money board.
   * **`style.css`**: Handles all the styling, layout, and animations. It uses modern CSS features like Flexbox, Grid, and `clamp()` for a fully responsive design.
   * **`script.js`**: Contains all the game logic. It is wrapped in a `DOMContentLoaded` listener to ensure it only runs after the page is fully loaded. This file is responsible for:
       * Shuffling and assigning card values.
       * Handling all user clicks and game states (`picking`, `eliminating`, `offer`).
       * Calculating the dealer's offer.
-      * Playing sound effects for different events.
       * Updating the DOM to reflect the game's progress.
