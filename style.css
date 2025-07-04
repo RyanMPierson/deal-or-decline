@@ -1,0 +1,202 @@
+/* --- Base Styles and Global Scaling --- */
+:root {
+    /* Set a base font size that scales with the viewport width, but won't get too small or too large. */
+    /* format: clamp(MINIMUM_SIZE, PREFERRED_SIZE, MAXIMUM_SIZE) */
+    font-size: clamp(10px, 1.2vw, 18px);
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #0d1b2a;
+    color: #e0e1dd;
+    margin: 0;
+    padding: 1rem; /* Use rem for scalable padding */
+}
+
+/* --- Layout Containers --- */
+.main-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5rem; /* Use rem for scalable gaps */
+    width: 100%;
+}
+
+.left-panel, .right-panel {
+    /* Panels now take a percentage of the width, making them responsive. */
+    width: 15%;
+    min-width: 150px; /* Prevent panels from becoming too narrow */
+    padding: 1.5rem;
+    background-color: #1b263b;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.game-area {
+    flex-grow: 1;
+    text-align: center;
+}
+
+/* --- Typography --- */
+.title {
+    /* Font size now uses responsive 'rem' units */
+    font-size: 3.5rem;
+    color: #fca311;
+    margin-bottom: 1rem;
+}
+
+#game-message {
+    font-size: 1.8rem;
+    min-height: 50px;
+    color: #e0e1dd;
+}
+
+/* --- The Card Grid --- */
+#card-grid {
+    display: grid;
+    /* The minimum card width now scales with the viewport, ensuring the grid reflows intelligently. */
+    grid-template-columns: repeat(auto-fit, minmax(clamp(80px, 10vmin, 140px), 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+    padding: 1rem;
+}
+
+.card {
+    /* Removed fixed height. aspect-ratio maintains the card shape as it scales. */
+    aspect-ratio: 4 / 3;
+    perspective: 1000px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s;
+    transform-style: preserve-3d;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.card.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem; /* Scalable font size */
+    font-weight: bold;
+}
+
+.card-front {
+    background: linear-gradient(145deg, #fca311, #e85d04);
+    color: #0d1b2a;
+}
+
+.card-back {
+    background: linear-gradient(145deg, #415a77, #1b263b);
+    color: #e0e1dd;
+    transform: rotateY(180deg);
+}
+
+.card.eliminated {
+    opacity: 0.4;
+    cursor: default;
+}
+
+/* --- Player and Dealer Sections --- */
+#player-card-area {
+    margin-top: 2rem;
+    min-height: 120px;
+}
+
+#player-card {
+    /* Player's card now also scales. */
+    width: 70%;
+    max-width: 150px;
+    margin: 0 auto;
+    cursor: default;
+}
+
+#dealer-section {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background-color: #1b263b;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#dealer-section h2 {
+    margin: 0 0 1rem 0;
+    font-size: 2rem;
+}
+
+#offer-amount {
+    color: #fca311;
+}
+
+button {
+    padding: 0.8rem 1.5rem; /* Scalable padding */
+    font-size: 1.2rem; /* Scalable font size */
+    font-weight: bold;
+    margin: 0 0.5rem;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#deal-button {
+    background-color: #2a9d8f;
+    color: white;
+}
+
+#deal-button:hover {
+    background-color: #264653;
+    transform: scale(1.05);
+}
+
+#decline-button {
+    background-color: #e76f51;
+    color: white;
+}
+
+#decline-button:hover {
+    background-color: #f4a261;
+    transform: scale(1.05);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* --- Money Board --- */
+#money-board {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* Scalable gap */
+}
+
+.money-value {
+    padding: 0.5rem; /* Scalable padding */
+    background-color: #415a77;
+    border-radius: 5px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 1rem; /* Scalable font size */
+    transition: all 0.5s;
+}
+
+.money-value.eliminated {
+    text-decoration: line-through;
+    opacity: 0.3;
+    background-color: #e76f51;
+}

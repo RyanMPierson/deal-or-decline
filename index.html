@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deal or Decline</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        <div class="left-panel">
+            <div id="money-board"></div>
+        </div>
+        <div class="game-area">
+            <h1 class="title">Deal or Decline</h1>
+            <p id="game-message">First, choose your lucky card.</p>
+            <div id="card-grid"></div>
+            <div id="dealer-section" class="hidden">
+                <h2>Dealer's Offer: <span id="offer-amount"></span></h2>
+                <button id="deal-button">DEAL</button>
+                <button id="decline-button">DECLINE</button>
+            </div>
+        </div>
+        <div class="right-panel">
+            <h2>Your Card</h2>
+            <div id="player-card-area"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
