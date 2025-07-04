@@ -200,3 +200,42 @@ button {
     opacity: 0.3;
     background-color: #e76f51;
 }
+
+@media (max-width: 800px) {
+    /* Change the main container to stack vertically */
+    .main-container {
+        flex-direction: column;
+        gap: 2rem; /* Adds space between the stacked sections */
+    }
+
+    /* Allow the side panels to take up the full width */
+    .left-panel, .right-panel {
+        width: 100%;
+        min-width: unset; /* Remove the minimum width */
+        /* Optional: Center text for a cleaner mobile look */
+        text-align: center;
+    }
+
+    /* Make the money board display its values in a row that wraps */
+    #money-board {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .money-value {
+        padding: 0.5rem;
+        flex-grow: 1; /* Allows values to grow and fill space */
+        min-width: 80px; /* Gives each a minimum width before wrapping */
+    }
+
+    /* Slightly reduce the title size on mobile */
+    .title {
+        font-size: 2.5rem;
+    }
+
+    #game-message {
+        font-size: 1.5rem;
+    }
+}
