@@ -5,6 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deal or Decline</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- Audio Elements -->
+    <audio id="card-flip-sound" preload="auto">
+        <source src="sounds/card-flip.mp3" type="audio/mpeg">
+        <source src="sounds/card-flip.wav" type="audio/wav">
+    </audio>
+    <audio id="card-select-sound" preload="auto">
+        <source src="sounds/card-select.mp3" type="audio/mpeg">
+        <source src="sounds/card-select.wav" type="audio/wav">
+    </audio>
+    <audio id="offer-sound" preload="auto">
+        <source src="sounds/offer.mp3" type="audio/mpeg">
+        <source src="sounds/offer.wav" type="audio/wav">
+    </audio>
+    <audio id="deal-sound" preload="auto">
+        <source src="sounds/deal.mp3" type="audio/mpeg">
+        <source src="sounds/deal.wav" type="audio/wav">
+    </audio>
+    <audio id="decline-sound" preload="auto">
+        <source src="sounds/decline.mp3" type="audio/mpeg">
+        <source src="sounds/decline.wav" type="audio/wav">
+    </audio>
+    <audio id="win-sound" preload="auto">
+        <source src="sounds/win.mp3" type="audio/mpeg">
+        <source src="sounds/win.wav" type="audio/wav">
+    </audio>
+    <audio id="lose-sound" preload="auto">
+        <source src="sounds/lose.mp3" type="audio/mpeg">
+        <source src="sounds/lose.wav" type="audio/wav">
+    </audio>
+    <audio id="background-music" preload="auto" loop>
+        <source src="sounds/background.mp3" type="audio/mpeg">
+        <source src="sounds/background.wav" type="audio/wav">
+    </audio>
+    <script src="sounds/fallback-sounds.js"></script>
 </head>
 <body>
     <div class="main-container">
@@ -13,6 +48,10 @@
         </div>
         <div class="game-area">
             <h1 class="title">Deal or Decline</h1>
+            <div class="sound-controls">
+                <button id="music-toggle" class="sound-btn">🎵</button>
+                <button id="sfx-toggle" class="sound-btn">🔊</button>
+            </div>
             <p id="game-message">First, choose your lucky card.</p>
             <div id="card-grid"></div>
             <div id="dealer-section" class="hidden">

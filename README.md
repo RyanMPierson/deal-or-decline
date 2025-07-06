@@ -18,6 +18,9 @@ This project is a front-end web application built with vanilla HTML, CSS, and Ja
 
   * **Player's Choice:** Select your own "lucky card" to keep until the end.
   * **Progressive Gameplay:** Play through multiple rounds, eliminating a decreasing number of cards each round.
+  * **Sound Effects:** Immersive audio experience with sound effects for all game actions
+  * **Audio Controls:** Toggle background music and sound effects independently
+  * **Fallback Audio:** Synthesized sounds when audio files aren't available
   * **Dynamic Dealer Offers:** The dealer calculates and presents a buyout offer based on the average value of the remaining cards.
   * **Deal or Decline:** Make the tough choice to accept the dealer's offer or decline it to continue playing.
   * **Dynamic Money Board:** A side panel dynamically updates to show which monetary values are still in play.
@@ -46,6 +49,31 @@ This is a pure front-end project and requires no special installation or build s
     cd deal-or-decline
     ```
 3.  Open the `index.html` file in your web browser.
+
+-----
+
+## Audio Features
+
+The game includes an immersive audio experience with:
+
+### Sound Effects
+- **Card selection** sounds when choosing your lucky card
+- **Card flip** sounds when revealing eliminated cards  
+- **Offer announcement** sounds when the dealer makes an offer
+- **Deal/Decline** sounds for button interactions
+- **Win/Lose** sounds based on game outcomes
+- **Background music** for ambient atmosphere
+
+### Audio Controls
+- **🎵 Music Toggle**: Control background music independently
+- **🔊 SFX Toggle**: Control sound effects independently
+- Both controls are located below the game title
+
+### Audio Setup
+To add custom sounds, place audio files in the `sounds/` directory:
+- Supported formats: MP3, WAV
+- See `sounds/README.md` for detailed audio file specifications
+- Fallback synthesized sounds are used when audio files aren't available
 
 -----
 

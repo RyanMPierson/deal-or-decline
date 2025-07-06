@@ -8,6 +8,123 @@ document.addEventListener('DOMContentLoaded', () => {
     const dealButton = document.getElementById('deal-button');
     const declineButton = document.getElementById('decline-button');
     const moneyBoard = document.getElementById('money-board');
+    const musicToggle = document.getElementById('music-toggle');
+    const sfxToggle = document.getElementById('sfx-toggle');
+
+    // --- Sound Management ---
+    const sounds = {
+        cardFlip: document.getElementById('card-flip-sound'),
+        cardSelect: document.getElementById('card-select-sound'),
+        offer: document.getElementById('offer-sound'),
+        deal: document.getElementById('deal-sound'),
+        decline: document.getElementById('decline-sound'),
+        win: document.getElementById('win-sound'),
+        lose: document.getElementById('lose-sound'),
+        background: document.getElementById('background-music')
+    };
+
+    let musicEnabled = true;
+    let sfxEnabled = true;
+    let fallbackSounds = null;
+    let lastSoundPlayed = {};
+
+    // Initialize fallback sounds
+    if (window.FallbackSounds) {
+        fallbackSounds = new FallbackSounds();
+    }
+
+    function playSound(soundName) {
+        if (!sfxEnabled && soundName !== 'background') return;
+        if (!musicEnabled && soundName === 'background') return;
+        
+        // Prevent playing the same sound too frequently
+        const now = Date.now();
+        if (lastSoundPlayed[soundName] && (now - lastSoundPlayed[soundName]) < 100) {
+            return;
+        }
+        lastSoundPlayed[soundName] = now;
+        
+        const sound = sounds[soundName];
+        
+        // Check if audio file exists and has loaded content
+        if (sound && sound.readyState >= 2 && sound.duration > 0) {
+            // Audio file is loaded and has actual content
+            sound.currentTime = 0;
+            const playPromise = sound.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.catch(e => {
+                    console.log('Audio file play failed, trying fallback:', e);
+                    // Add a small delay before fallback to prevent overlap
+                    setTimeout(() => playFallbackSound(soundName), 50);
+                });
+            }
+        } else {
+            // Audio file not available or not loaded, use fallback
+            playFallbackSound(soundName);
+        }
+    }
+
+    function playFallbackSound(soundName) {
+        if (!fallbackSounds || soundName === 'background') return;
+        
+        // Check if we already played this sound recently to prevent overlaps
+        const now = Date.now();
+        if (lastSoundPlayed[soundName + '_fallback'] && (now - lastSoundPlayed[soundName + '_fallback']) < 200) {
+            return;
+        }
+        lastSoundPlayed[soundName + '_fallback'] = now;
+        
+        switch(soundName) {
+            case 'cardFlip':
+                fallbackSounds.cardFlip();
+                break;
+            case 'cardSelect':
+                fallbackSounds.cardSelect();
+                break;
+            case 'offer':
+                fallbackSounds.offer();
+                break;
+            case 'deal':
+                fallbackSounds.deal();
+                break;
+            case 'decline':
+                fallbackSounds.decline();
+                break;
+            case 'win':
+                fallbackSounds.win();
+                break;
+            case 'lose':
+                fallbackSounds.lose();
+                break;
+        }
+    }
+
+    function toggleMusic() {
+        musicEnabled = !musicEnabled;
+        musicToggle.classList.toggle('muted', !musicEnabled);
+        musicToggle.textContent = musicEnabled ? '🎵' : '🔇';
+        
+        if (musicEnabled) {
+            playSound('background');
+        } else {
+            sounds.background.pause();
+        }
+    }
+
+    function toggleSFX() {
+        sfxEnabled = !sfxEnabled;
+        sfxToggle.classList.toggle('muted', !sfxEnabled);
+        sfxToggle.textContent = sfxEnabled ? '🔊' : '🔇';
+    }
+
+    // Set initial volume levels
+    sounds.background.volume = 0.3;
+    Object.keys(sounds).forEach(key => {
+        if (key !== 'background') {
+            sounds[key].volume = 0.7;
+        }
+    });
 
     // --- Game Configuration ---
     const amounts = [
@@ -35,6 +152,9 @@ document.addEventListener('DOMContentLoaded', () => {
         playerCardArea.innerHTML = '';
         grid.innerHTML = '';
         moneyBoard.innerHTML = '';
+        
+        // Start background music
+        playSound('background');
         
         let shuffledAmounts = [...amounts];
         shuffle(shuffledAmounts);
@@ -91,6 +211,9 @@ document.addEventListener('DOMContentLoaded', () => {
         card.element.querySelector('.card-back').textContent = formatCurrency(card.value);
         card.element.classList.add('flipped', 'eliminated');
         
+        // Play card flip sound
+        playSound('cardFlip');
+        
         const moneyValueDiv = moneyBoard.querySelector(`[data-value='${card.value}']`);
         if(moneyValueDiv) {
             moneyValueDiv.classList.add('eliminated');
@@ -107,9 +230,14 @@ document.addEventListener('DOMContentLoaded', () => {
             card.eliminated = true;
             playerCardArea.appendChild(card.element);
             gameState = 'eliminating';
+            
+            // Play card select sound
+            playSound('cardSelect');
+            
             updateGameMessage();
         } else if (gameState === 'eliminating' && cardsToEliminate > 0) {
             revealCard(card);
+            playSound('cardFlip');
             cardsToEliminate--;
             // After a pick, if the round is over, always make an offer.
             // The decision to end the game is now handled by the "Decline" button logic.
@@ -138,6 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
         offerAmount.textContent = formatCurrency(offer);
         gameMessage.textContent = "The Dealer offers you...";
         dealerSection.classList.remove('hidden');
+        playSound('offer');
     }
 
     function endGame(tookDeal, dealValue = null) {
@@ -150,13 +279,31 @@ document.addEventListener('DOMContentLoaded', () => {
             revealCard(playerCard);
             if (tookDeal) {
                 gameMessage.innerHTML = `You accepted the deal of ${formatCurrency(dealValue)}! <br> Your card had ${formatCurrency(playerCard.value)}.`;
+                // Play win sound if deal was better than player's card, lose if not
+                if (dealValue > playerCard.value) {
+                    playSound('win');
+                } else {
+                    playSound('lose');
+                }
             } else {
                 // Reveal the last remaining card on the board for comparison
                 const lastCard = cards.find(c => !c.eliminated);
                 if (lastCard) {
                    revealCard(lastCard);
                 }
-                gameMessage.innerHTML = `You DECLINED! You won ${formatCurrency(playerCard.value)}!`;
+                
+                // Compare player's card to the final card and show appropriate message
+                if (lastCard && playerCard.value > lastCard.value) {
+                    gameMessage.innerHTML = `You DECLINED and WON! Your card (${formatCurrency(playerCard.value)}) beat the final card (${formatCurrency(lastCard.value)})!`;
+                    playSound('win');
+                } else if (lastCard) {
+                    gameMessage.innerHTML = `You DECLINED but LOST! Your card (${formatCurrency(playerCard.value)}) was less than the final card (${formatCurrency(lastCard.value)}).`;
+                    playSound('lose');
+                } else {
+                    // Fallback if no final card found
+                    gameMessage.innerHTML = `You DECLINED! You won ${formatCurrency(playerCard.value)}!`;
+                    playSound('win');
+                }
             }
         } else {
              gameMessage.innerHTML = `Something went wrong! Please play again.`;
@@ -193,10 +340,12 @@ document.addEventListener('DOMContentLoaded', () => {
     dealButton.addEventListener('click', () => {
         const dealValue = parseFloat(offerAmount.textContent.replace(/[$,]/g, ''));
         endGame(true, dealValue);
+        playSound('deal');
     });
     
     // --- UPDATED LOGIC ---
     declineButton.addEventListener('click', () => {
+        playSound('decline');
         dealerSection.classList.add('hidden');
         
         // Check how many cards are left on the board (excluding player's card)
@@ -213,6 +362,10 @@ document.addEventListener('DOMContentLoaded', () => {
             updateGameMessage();
         }
     });
+
+    // --- Sound Control Event Listeners ---
+    musicToggle.addEventListener('click', toggleMusic);
+    sfxToggle.addEventListener('click', toggleSFX);
 
     // --- Start the game ---
     initGame();
